@@ -21,7 +21,7 @@ async def on_new_message(event):
     snips = sql.get_chat_blacklist(event.chat_id)
     for snip in snips:
         pattern = r"( |^|[^\w])" + re.escape(snip) + r"( |$|[^\w])"
-        if snip in event.text:
+        if re.search(pattern, name, flags=re.IGNORECASE):
             try:
                 event.delete()
                 if event.reply_to_msg_id:
