@@ -20,5 +20,5 @@ async def quote_search(event):
         result = None
     if result:
         await event.edit(result.replace("<code>", "`").replace("</code>", "`"))
-    except:
+    else:
         await event.edit("Zero results found")
