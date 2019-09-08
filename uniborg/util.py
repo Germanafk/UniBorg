@@ -20,7 +20,7 @@ else:
 
 
 def admin_cmd(pattern=None, allow_sudo=False, **args):
-    allow_sudo = True
+    args["allow_sudo"] = allow_sudo
 
     # get the pattern from the decorator
     if pattern is not None:
