@@ -261,7 +261,7 @@ All instructions to run @UniBorg in your device has been explained in https://gi
             reply_pop_up_alert = "No DOCSTRING has been setup for {} plugin".format(plugin_name)
         else:
             reply_pop_up_alert = help_string
-        reply_pop_up_alert += "\n\n Use .unload {} to remove this plugin\n\n
+        reply_pop_up_alert += "\n\n Use .unload {} to remove this plugin\n\
             © @UniBorg".format(plugin_name)
         await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
