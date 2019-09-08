@@ -19,8 +19,9 @@ else:
         from config import Development as Config
 
 
-def admin_cmd(pattern=None, allow_sudo=True, **args):
+def admin_cmd(pattern=None, **args):
     args["allow_sudo"] = True
+    allow_sudo = args["allow_sudo"]
 
     # get the pattern from the decorator
     if pattern is not None:
