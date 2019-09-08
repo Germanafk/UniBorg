@@ -1,4 +1,4 @@
-telethon
+telethon==1.10
 lxml
 aria2p
 coffeehouse==1.0.4
