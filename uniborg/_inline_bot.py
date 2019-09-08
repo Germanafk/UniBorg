@@ -255,8 +255,11 @@ All instructions to run @UniBorg in your device has been explained in https://gi
     ))
     async def on_plug_in_callback_query_handler(event):
         plugin_name = event.data_match.group(1).decode("UTF-8")
-        help_string = borg._plugins[plugin_name].__doc__[
-            0:125]  # pylint:disable=E0602
+        try:
+            help_string = borg._plugins[plugin_name].__doc__[
+                0:125]  # pylint:disable=E0602
+        except:
+            pass
         if help_string is None:
             reply_pop_up_alert = "No DOCSTRING has been setup for {} plugin".format(plugin_name)
         else:
