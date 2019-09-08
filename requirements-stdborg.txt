@@ -28,6 +28,7 @@ wikipedia
 youtube-dl
 google-api-python-client
 oauth2client
+gsearch
 httplib2
 pytube
 PyGithub
