@@ -6,6 +6,7 @@ from uniborg.util import admin_cmd
 async def quote_search(event):
     if event.fwd_from:
         return
+    await event.edit("Processing...")
     search_string = event.pattern_match.group(1)
     input_url = "https://bots.shrimadhavuk.me/Telegram/GoodReadsQuotesBot/?q={}".format(search_string)
     headers = {"USER-AGENT": "UniBorg"}
