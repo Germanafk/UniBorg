@@ -258,7 +258,7 @@ All instructions to run @UniBorg in your device has been explained in https://gi
         help_string = borg._plugins[plugin_name].__doc__[
             0:125]  # pylint:disable=E0602
         if help_string is None:
-            reply_pop_up_alert = "No DOCSTRING has been setup for {} plugin".format(plugin_name)"
+            reply_pop_up_alert = "No DOCSTRING has been setup for {} plugin".format(plugin_name)
         else:
             reply_pop_up_alert = help_string
         reply_pop_up_alert += "\n\n Use .unload {} to remove this plugin\n\n
