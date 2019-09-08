@@ -13,6 +13,6 @@ async def quote_search(event):
     response = requests.get(input_url, headers=headers).json()
     result = random.choice(response).get("input_message_content").get("message_text")
     if result:
-        await event.edit(result.replace("<code>", "").replace("</code>", ""))
+        await event.edit(result.replace("<code>", "`").replace("</code>", "`"))
     else:
         await event.edit("Zero results found")
