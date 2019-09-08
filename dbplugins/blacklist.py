@@ -21,9 +21,12 @@ async def on_new_message(event):
     snips = sql.get_chat_blacklist(event.chat_id)
     for snip in snips:
         pattern = r"( |^|[^\w])" + re.escape(snip) + r"( |$|[^\w])"
-        if re.search(pattern, name, flags=re.IGNORECASE):
+        if blacklist in event.text:
             try:
-                await event.delete()
+                event.delete()
+                if event.reply_to_msg_id:
+                   reply = await event.get_reply_message()
+                   reply.delete()
             except Exception as e:
                 await event.reply("I do not have DELETE permission in this chat")
                 sql.rm_from_blacklist(event.chat_id, snip.lower())
