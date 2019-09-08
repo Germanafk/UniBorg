@@ -4,7 +4,7 @@ from uniborg.util import admin_cmd
 
 @borg.on(admin_cmd(pattern="quote ?(.*)"))
 async def quote_search(event):
-    if event.fwd_from
+    if event.fwd_from:
         return
     search_string = event.pattern_match.group(1)
     input_url = "https://bots.shrimadhavuk.me/Telegram/GoodReadsQuotesBot/?q={}".format(search_string)
