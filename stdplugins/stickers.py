@@ -68,7 +68,9 @@ async def _(event):
             fwd_message = await borg.forward_messages(
                 429000,
                 re_message,
-                silent=True
+                silent=True,
+                allow_cache=False,
+                force_document=True
             )
 
     await event.edit("Processing this sticker. Please Wait!")
@@ -81,7 +83,9 @@ async def _(event):
         fwd_message = await borg.forward_messages(
             429000,
             re_message,
-            silent=True
+            silent=True,
+            allow_cache=False,
+            force_document=True
         )
         if not await stickerset_exists(bot_conv, packshortname):
             await silently_send_message(bot_conv, "/cancel")
