@@ -63,7 +63,13 @@ async def _(event):
         with BytesIO(file) as mem_file, BytesIO() as sticker:
             resize_image(mem_file, sticker)
             sticker.seek(0)
-            uploaded_sticker = await borg.upload_file(sticker, file_name=file_ext_ns_ion)
+            re_message = await event.get_reply_message()
+            # https://t.me/telethonofftopic/78166
+            fwd_message = await borg.forward_messages(
+                event.chat_id,
+                re_message,
+                silent=True
+            )
 
     await event.edit("Processing this sticker. Please Wait!")
 
@@ -83,10 +89,9 @@ async def _(event):
             if not response.text.startswith("Alright!"):
                 await event.edit(f"**FAILED**! @Stickers replied: {response.text}")
                 return
-            w = await bot_conv.send_file(
-                file=uploaded_sticker,
-                allow_cache=False,
-                force_document=True
+            w = await borg.forward_messages(
+                "429000",
+                fwd_message
             )
             response = await bot_conv.get_response()
             if "Sorry" in response.text:
@@ -104,10 +109,9 @@ async def _(event):
             await silently_send_message(bot_conv, "/cancel")
             await silently_send_message(bot_conv, "/addsticker")
             await silently_send_message(bot_conv, packshortname)
-            await bot_conv.send_file(
-                file=uploaded_sticker,
-                allow_cache=False,
-                force_document=True
+            await borg.forward_messages(
+                "429000",
+                fwd_message
             )
             response = await bot_conv.get_response()
             if "Sorry" in response.text:
