@@ -3,13 +3,12 @@ from telethon import events
 import os
 import requests
 import logging
-from sample_config.Config import OCR_SPACE_API_KEY, TMP_DOWNLOAD_DIRECTORY
 from uniborg.util import admin_cmd
 
 
 async def ocr_space_file(filename,
                          overlay=False,
-                         api_key=OCR_SPACE_API_KEY,
+                         api_key=Config.OCR_SPACE_API_KEY,
                          language='eng'):
     """ OCR.space API request with local file.
         Python3.5 - not tested on 2.7
@@ -43,11 +42,11 @@ async def ocr(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@",
                                                              "!"):
         await event.edit("`Reading...`")
-        if not os.path.isdir(TMP_DOWNLOAD_DIRECTORY):
-            os.makedirs(TMP_DOWNLOAD_DIRECTORY)
+        if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
+            os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
         lang_code = event.pattern_match.group(1)
         downloaded_file_name = await bot.download_media(
-            await event.get_reply_message(), TMP_DOWNLOAD_DIRECTORY)
+            await event.get_reply_message(), Config.TMP_DOWNLOAD_DIRECTORY)
         test_file = await ocr_space_file(filename=downloaded_file_name,
                                          language=lang_code)
         try:
