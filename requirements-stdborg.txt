@@ -8,6 +8,7 @@ dnspython
 emoji
 googletrans
 google_images_download
+google_auth_oauthlib
 gtts
 hachoir
 Pillow
