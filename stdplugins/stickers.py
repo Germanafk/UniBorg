@@ -76,6 +76,13 @@ async def _(event):
     async with borg.conversation("@Stickers") as bot_conv:
         now = datetime.datetime.now()
         dt = now + datetime.timedelta(minutes=1)
+        re_message = await event.get_reply_message()
+        # https://t.me/telethonofftopic/78166
+        fwd_message = await borg.forward_messages(
+            event.chat_id,
+            re_message,
+            silent=True
+        )
         if not await stickerset_exists(bot_conv, packshortname):
             await silently_send_message(bot_conv, "/cancel")
             if is_a_s:
