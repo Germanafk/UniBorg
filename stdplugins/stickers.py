@@ -66,7 +66,7 @@ async def _(event):
             re_message = await event.get_reply_message()
             # https://t.me/telethonofftopic/78166
             fwd_message = await borg.forward_messages(
-                event.chat_id,
+                429000,
                 re_message,
                 silent=True
             )
@@ -79,7 +79,7 @@ async def _(event):
         re_message = await event.get_reply_message()
         # https://t.me/telethonofftopic/78166
         fwd_message = await borg.forward_messages(
-            event.chat_id,
+            429000,
             re_message,
             silent=True
         )
