@@ -37,7 +37,7 @@ async def ocr_space_file(filename,
     return r.json()
 
 
-@borg.on(admin_cmd(pattern=r"\.ocr (.*)", outgoing=True))
+@borg.on(admin_cmd(pattern="ocr (.*)", outgoing=True))
 async def ocr(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@",
                                                              "!"):
