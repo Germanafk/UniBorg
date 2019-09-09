@@ -90,7 +90,7 @@ async def _(event):
                 await event.edit(f"**FAILED**! @Stickers replied: {response.text}")
                 return
             w = await borg.forward_messages(
-                "429000",
+                429000,
                 fwd_message
             )
             response = await bot_conv.get_response()
@@ -110,7 +110,7 @@ async def _(event):
             await silently_send_message(bot_conv, "/addsticker")
             await silently_send_message(bot_conv, packshortname)
             await borg.forward_messages(
-                "429000",
+                429000,
                 fwd_message
             )
             response = await bot_conv.get_response()
