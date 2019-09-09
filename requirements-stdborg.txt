@@ -14,7 +14,6 @@ hachoir
 Pillow
 psycopg2
 pymongo
-pySmartDL
 python-barcode
 python-magic
 qrcode
