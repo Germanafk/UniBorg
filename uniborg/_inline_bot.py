@@ -192,7 +192,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             result = builder.article(
                 "Button Parser © @UniBorg",
                 text=f"Button Parser © @UniBorg",
-                buttons=[custom.Button.url("Source Code", "")],
+                buttons=[custom.Button.url("Source Code", "https://da.gd/YQgR7")],
                 link_preview=True
             )
         else:
