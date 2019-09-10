@@ -79,8 +79,8 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         elif query.startswith("ytdl"):
             # input format should be ytdl URL
             p = re.compile("ytdl (.*)")
-            r = p.search(query)
-            ytdl_url = "https://www.google.com/url?q=" + r.group(1).strip()
+            b = p.search(event.text)
+            ytdl_url = "https://www.google.com/url?q=" + b.group(1).strip()
             if ytdl_url.startswith("http"):
                 command_to_exec = [
                     "youtube-dl",
@@ -191,8 +191,8 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
         elif query.startswith("tb_btn"):
             result = builder.article(
                 "Button Parser © @UniBorg",
-                text=f"powered by @UniBorg",
-                buttons=[],
+                text=f"Button Parser © @UniBorg",
+                buttons=[custom.Button.url("Source Code", "")],
                 link_preview=True
             )
         else:
@@ -206,7 +206,7 @@ All instructions to run @UniBorg in your device has been explained in https://gi
                     [custom.Button.url("Contact the Creator", "https://telegram.dog/snappy101"), custom.Button.url(
                         "Tutorial", "https://telegra.ph/Tutorial-07-26")],
                     [custom.Button.url(
-                        "Source Code", "https://github.com/SnapDragon7410/UniBorg"), custom.Button.url("Best Prank Ever", "https://telegram.dog/s/freenetrulez")],
+                        "Source Code", "https://github.com/SnapDragon7410/UniBorg"), custom.Button.url("Best Prank Ever", "https://da.gd/OpvE3")],
                     [custom.Button.url(
                         "Deploy to Heroku", "http://da.gd/SnapBorg"), custom.Button.url("Fork Boost", "https://telegra.ph/Fork-Boost-07-28"), custom.Button.url("Premium Dyno Cheat", "https://telegra.ph/Premium-Dyno-Cheat-07-28")]
                 ],
