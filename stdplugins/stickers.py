@@ -29,7 +29,7 @@ from telethon.tl.types import (
 from uniborg.util import admin_cmd
 
 
-@borg.on(admin_cmd("kangsticker ?(.*)"))
+@borg.on(admin_cmd(pattern="kangsticker ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
@@ -55,7 +55,7 @@ async def _(event):
         file_ext_ns_ion = "AnimatedSticker.tgs"
         uploaded_sticker = await borg.upload_file(file, file_name=file_ext_ns_ion)
         packname = f"{userid}'s @AnimatedStickersGroup"
-        packshortname = f"SnapDragon_Animated"  # format: Uni_Borg_userid
+        packshortname = f"Uni_Borg_{userid}_as" if borg.me.id is not 719877937 else "SnapDragon_Animated"  # format: Uni_Borg_userid
     elif not is_message_image(reply_message):
         await event.edit("Invalid message type")
         return
@@ -63,30 +63,13 @@ async def _(event):
         with BytesIO(file) as mem_file, BytesIO() as sticker:
             resize_image(mem_file, sticker)
             sticker.seek(0)
-            re_message = await event.get_reply_message()
-            # https://t.me/telethonofftopic/78166
-            fwd_message = await borg.forward_messages(
-                429000,
-                re_message,
-                silent=True,
-                allow_cache=False,
-                force_document=True
-            )
+            uploaded_sticker = await borg.upload_file(sticker, file_name=file_ext_ns_ion)
 
     await event.edit("Processing this sticker. Please Wait!")
 
     async with borg.conversation("@Stickers") as bot_conv:
         now = datetime.datetime.now()
         dt = now + datetime.timedelta(minutes=1)
-        re_message = await event.get_reply_message()
-        # https://t.me/telethonofftopic/78166
-        fwd_message = await borg.forward_messages(
-            429000,
-            re_message,
-            silent=True,
-            allow_cache=False,
-            force_document=True
-        )
         if not await stickerset_exists(bot_conv, packshortname):
             await silently_send_message(bot_conv, "/cancel")
             if is_a_s:
@@ -100,9 +83,10 @@ async def _(event):
             if not response.text.startswith("Alright!"):
                 await event.edit(f"**FAILED**! @Stickers replied: {response.text}")
                 return
-            w = await borg.forward_messages(
-                429000,
-                fwd_message
+            w = await bot_conv.send_file(
+                file=uploaded_sticker,
+                allow_cache=False,
+                force_document=True
             )
             response = await bot_conv.get_response()
             if "Sorry" in response.text:
@@ -120,9 +104,10 @@ async def _(event):
             await silently_send_message(bot_conv, "/cancel")
             await silently_send_message(bot_conv, "/addsticker")
             await silently_send_message(bot_conv, packshortname)
-            await borg.forward_messages(
-                429000,
-                fwd_message
+            await bot_conv.send_file(
+                file=uploaded_sticker,
+                allow_cache=False,
+                force_document=True
             )
             response = await bot_conv.get_response()
             if "Sorry" in response.text:
@@ -135,7 +120,7 @@ async def _(event):
     await event.edit(f"sticker added! Your pack can be found [here](t.me/addstickers/{packshortname})")
 
 
-@borg.on(admin_cmd("packinfo"))
+@borg.on(admin_cmd(pattern="packinfo"))
 async def _(event):
     if event.fwd_from:
         return
@@ -171,7 +156,7 @@ async def _(event):
                      f"**Emojis In Pack:** {' '.join(pack_emojis)}")
 
 
-@borg.on(admin_cmd("getsticker ?(.*)"))
+@borg.on(admin_cmd(pattern="getsticker ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
