@@ -3,9 +3,7 @@ G-Muter Plugin for userbot. //Needs MongoDB to work.
 cmds: .gmute user_id|reply to user messsage	//G-Mutes a User.
 	  .ungmute user_id|reply to user messsage //Un-Gmutes a User.
 	  .listgmuted //List Currently G-Muted Users.
-
 By:- JaskaranSM ( @Zero_cool7870 )
-
 """
 
 from telethon import events
@@ -13,12 +11,8 @@ import logging
 import asyncio
 from uniborg.util import admin_cmd
 logging.basicConfig(level=logging.INFO)
-
-
-MONGO_URI= Config.MONGO_URI
-if MONGO_URI is None:
-	logging.error("ADD MONGO_URI in Env Vars Plox.")
-try:
+MONGO_URI = Config.MONGO_URI
+try:	
 	db = mongo_client['test']
 	muted = db.muted
 except Exception as e:
@@ -115,7 +109,6 @@ async def gmute_listener(sender):
 	except:
 		return 
 			
-
 
 
 
