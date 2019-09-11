@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 
 from telethon import TelegramClient
+import os
 import telethon.utils
 import telethon.events
 
