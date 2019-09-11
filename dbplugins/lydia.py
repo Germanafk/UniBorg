@@ -16,7 +16,6 @@ import asyncio
 import logging
 from time import time
 from telethon import events
-from pymongo import MongoClient
 logging.basicConfig(level=logging.INFO)
 
 if Config.MONGO_URI and Config.LYDIA_API is not None:
@@ -24,8 +23,7 @@ if Config.MONGO_URI and Config.LYDIA_API is not None:
 
 	# Initialise client
 	api_client = cf.API(api_key)
-	cl = MongoClient(Config.MONGO_URI)
-	db = cl['test']
+	db = mongo_client['test']
 	lydia = db.lydia
 
 
@@ -93,7 +91,7 @@ async def lydia_list(event):
 		msg += "\n__Chat:__ `{}`\n".format(str(c['chat_id']))	
 	await event.edit(msg)	
 	
-@borg.on(events.NewMessage())  
+@borg.on(events.NewMessage(incoming=True))  
 async def Lydia_bot_update(event):
 	if event.fwd_from:
 		return
