@@ -10,6 +10,7 @@ from telethon import events
 import logging
 import asyncio
 from uniborg.util import admin_cmd
+from telethon.tl.functions.users import GetFullUserRequest
 logging.basicConfig(level=logging.INFO)
 MONGO_URI = Config.MONGO_URI
 try:	
@@ -24,7 +25,7 @@ async def gmute_user(event):
 		return
 	input_str = event.pattern_match.group(1)
 	replied_user = await event.client(GetFullUserRequest(event.chat_id))
-        firstname = replied_user.user.first_name
+	firstname = replied_user.user.first_name
 	if not event.reply_to_msg_id and not input_str:
 		await event.edit("`Give a User id or Reply To a User Message To Mute.`")
 		return	
