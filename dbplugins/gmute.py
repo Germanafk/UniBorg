@@ -68,7 +68,9 @@ async def gmute_user(event):
 async def un_gmute_user(event):
 	if event.fwd_from:
 		return
-	input_str = event.pattern_match.group(1)	
+	input_str = event.pattern_match.group(1)
+	replied_user = await event.client(GetFullUserRequest(event.chat_id))
+	firstname = replied_user.user.first_name
 	if not event.reply_to_msg_id and not input_str:
 		await event.edit("`Give a User id or Reply To a User Message To Mute.`")
 		return	
@@ -80,7 +82,7 @@ async def un_gmute_user(event):
 	await event.edit("`Removing Duct Tape from User's Mouth.`")	
 	try:
 		muted.delete_one({'user_id':user_id})
-		await event.edit("`Un-Gmuted` [{}](tg://user?id={}).".format(str(user_id),str(user_id)))
+		await event.edit(f"Alright,I am giving [{firstname}](tg://user?id={user_id}) a second chance __globally__")
 		logging.info("Un-Gmuted {}".format(str(user_id)))
 	except Exception as e:
 		logging.error(str(e))
