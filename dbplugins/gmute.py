@@ -10,6 +10,7 @@ from telethon import events
 import logging
 import asyncio
 from uniborg.util import admin_cmd
+from telethon.tl.functions.users import GetFullUserRequest
 logging.basicConfig(level=logging.INFO)
 MONGO_URI = Config.MONGO_URI
 try:	
@@ -22,7 +23,7 @@ except Exception as e:
 async def gmute_user(event):
 	if event.fwd_from:
 		return
-	input_str = event.pattern_match.group(1)	
+	input_str = event.pattern_match.group(1)
 	if not event.reply_to_msg_id and not input_str:
 		await event.edit("`Give a User id or Reply To a User Message To Mute.`")
 		return	
@@ -32,6 +33,8 @@ async def gmute_user(event):
 	else:
 		user_id = int(input_str)
 
+	replied_user = await event.client(GetFullUserRequest(user_id))
+	firstname = replied_user.user.first_name
 	await event.edit("`Getting a duct tape..`")	
 	try:
 		chat = await event.get_chat()
@@ -52,7 +55,7 @@ async def gmute_user(event):
 					return
 			else:
 				muted.insert_one({'user_id':user_id})
-				await event.edit("`G-Muted` [{}](tg://user?id={}).".format(str(user_id),str(user_id)))
+				await event.edit(f"Damn! [{firstname}](tg://user?id={user_id})\nYou talk too much.G-moot for you (ノಠ益ಠ)ノ")
 				logging.info("G-Muted {}".format(str(user_id)))
 		except Exception as e:
 			logging.error(str(e))
@@ -65,7 +68,7 @@ async def gmute_user(event):
 async def un_gmute_user(event):
 	if event.fwd_from:
 		return
-	input_str = event.pattern_match.group(1)	
+	input_str = event.pattern_match.group(1)
 	if not event.reply_to_msg_id and not input_str:
 		await event.edit("`Give a User id or Reply To a User Message To Mute.`")
 		return	
@@ -74,10 +77,12 @@ async def un_gmute_user(event):
 		user_id = msg.from_id	
 	else:
 		user_id = int(input_str)	
+	replied_user = await event.client(GetFullUserRequest(user_id))
+	firstname = replied_user.user.first_name
 	await event.edit("`Removing Duct Tape from User's Mouth.`")	
 	try:
 		muted.delete_one({'user_id':user_id})
-		await event.edit("`Un-Gmuted` [{}](tg://user?id={}).".format(str(user_id),str(user_id)))
+		await event.edit(f"Alright,I am giving [{firstname}](tg://user?id={user_id}) a second chance __globally__")
 		logging.info("Un-Gmuted {}".format(str(user_id)))
 	except Exception as e:
 		logging.error(str(e))
