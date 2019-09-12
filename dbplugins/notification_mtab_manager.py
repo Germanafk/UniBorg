@@ -301,7 +301,7 @@ async def do_pm_permit_action(chat_id, event):
 
 
 async def do_log_pm_action(chat_id, message_text, message_media):
-    replied_user = await event.client(GetFullUserRequest(event.chat_id))
+    replied_user = await event.client(GetFullUserRequest(chat_id))
     firstname = replied_user.user.first_name
     the_message = ""
     the_message += "#LOG_PMs\n\n"
