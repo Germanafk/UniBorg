@@ -55,6 +55,7 @@ async def create_dump_channel(event):
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         global replied_user
+        replied_user, error_i_a = await get_full_user(event)
         firstname = replied_user.user.firstname
         reason = event.pattern_match.group(1)
         chat = await event.get_chat()
@@ -70,6 +71,7 @@ async def set_no_log_p_m(event):
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         global replied_user
+        replied_user, error_i_a = await get_full_user(event)
         firstname = replied_user.user.firstname
         reason = event.pattern_match.group(1)
         chat = await event.get_chat()
@@ -109,6 +111,7 @@ async def approve_p_m(event):
     if event.fwd_from:
         return
     global replied_user
+    replied_user, error_i_a = await get_full_user(event)
     firstname = replied_user.user.firstname
     reason = event.pattern_match.group(1)
     chat = await event.get_chat()
