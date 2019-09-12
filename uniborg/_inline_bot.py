@@ -6,7 +6,7 @@ import asyncio
 import json
 import random
 import re
-from telethon import events, custom
+from telethon import events, errors, custom
 from uniborg.util import admin_cmd, humanbytes
 
 
@@ -196,7 +196,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 link_preview=True
             )
         elif query.startswith("c_button"):
-            BTN_URL_REGEX = re.compile(r"(\{([^\[]+?)\}\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
+            BTN_URL_REGEX = re.compile(r"(\{([^\[]+?)\}\<button(?:url|text):(?:/{0,2})(.+?)(:same)?\>)")
             reply_message = query.replace("c_button ", "")
             markdown_note = reply_message
             prev = 0
@@ -225,17 +225,20 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 note_data += markdown_note[prev:]
 
             message_text = note_data.strip()
-            tl_ib_buttons = build_keyboard(buttons)
+            tl_ib_buttons = build_keyboard(buttons, markdown_note)
         
             # logger.info(message_text)
             # logger.info(tl_ib_buttons)
 
-            result = builder.article(
-                "Button Generated" if tl_ib_buttons else "Proccessing..." ,
-                text=message_text if tl_ib_buttons else "Error",
-                buttons=tl_ib_buttons if tl_ib_buttons else [custom.Button.inline("Error", "Please Do Not Press Proccessing... Again")],
-                link_preview=False
-            )
+            try:
+                result = builder.article(
+                    "Button Generated" if tl_ib_buttons else "Proccessing..." ,
+                    text=message_text if tl_ib_buttons else "Error",
+                    buttons=tl_ib_buttons if tl_ib_buttons else [custom.Button.inline("Error", "Please Do Not Press Proccessing... Again")],
+                    link_preview=True
+                )
+            except ButtonUrlInvalidError:
+                pass
         else:
             result = builder.article(
                 "© @UniBorg",
@@ -292,6 +295,14 @@ All instructions to run @UniBorg in your device has been explained in https://gi
 
 
     @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
+        data=re.compile(b"txt_prod_(.*)")
+    ))
+    async def on_plug_in_callback_query_handler(event):
+        reply_pop_up_alert = event.data_match.group(1).decode("UTF-8")
+        await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+
+
+    @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"ub_plugin_(.*)")
     ))
     async def on_plug_in_callback_query_handler(event):
@@ -337,11 +348,15 @@ def paginate_help(page_number, loaded_plugins, prefix):
         ]
     return pairs
 
-def build_keyboard(buttons):
+def build_keyboard(buttons, query):
     keyb = []
     for btn in buttons:
-        if btn[2] and keyb:
+        if btn[2] and keyb and "buttonurl" in query:
             keyb[-1].append(custom.Button.url(btn[0], btn[1]))
         else:
             keyb.append([custom.Button.url(btn[0], btn[1])])
+        if btn[2] and keyb and "buttontext" in query:
+            keyb[-1].append(custom.Button.inline(btn[0], data="txt_prod_{}".format(btn[1])))
+        else:
+            keyb.append([custom.Button.inline(btn[0], data="txt_prod_{}".format(btn[1]))])
     return keyb
