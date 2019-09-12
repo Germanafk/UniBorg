@@ -5,6 +5,7 @@ import asyncio
 import io
 import sql_helpers.no_log_pms_sql as no_log_pms_sql
 import sql_helpers.pmpermit_sql as pmpermit_sql
+from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
 from uniborg.util import admin_cmd
 
@@ -54,12 +55,15 @@ async def create_dump_channel(event):
 @borg.on(admin_cmd(pattern="nolog ?(.*)"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
+        global replied_user
+        replied_user = await event.client(GetFullUserRequest(event.chat_id))
+        firstname = replied_user.user.first_name
         reason = event.pattern_match.group(1)
         chat = await event.get_chat()
         if event.is_private:
             if not no_log_pms_sql.is_approved(chat.id):
                 no_log_pms_sql.approve(chat.id)
-                await event.edit("Won't Log Messages from this chat")
+                await event.edit("Won't Log Messages from [{}](tg://user?id={})".format(firstname, chat.id))
                 await asyncio.sleep(3)
                 await event.delete()
 
@@ -67,12 +71,15 @@ async def set_no_log_p_m(event):
 @borg.on(admin_cmd(pattern="dellog ?(.*)"))
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
+        global replied_user
+        replied_user = await event.client(GetFullUserRequest(event.chat_id))
+        firstname = replied_user.user.first_name
         reason = event.pattern_match.group(1)
         chat = await event.get_chat()
         if event.is_private:
             if no_log_pms_sql.is_approved(chat.id):
                 no_log_pms_sql.disapprove(chat.id)
-                await event.edit("Will Log Messages from this chat")
+                await event.edit("Will Log Messages from [{}](tg://user?id={})".format(firstname, chat.id))
                 await asyncio.sleep(3)
                 await event.delete()
 
@@ -81,6 +88,9 @@ async def set_no_log_p_m(event):
 async def approve_p_m(event):
     if event.fwd_from:
         return
+    global replied_user
+    replied_user = await event.client(GetFullUserRequest(event.chat_id))
+    firstname = replied_user.user.first_name
     reason = event.pattern_match.group(1)
     chat = await event.get_chat()
     if Config.PM_LOGGR_BOT_API_ID is not None:
@@ -92,7 +102,7 @@ async def approve_p_m(event):
                     await PREV_REPLY_MESSAGE[chat.id].delete()
                     del PREV_REPLY_MESSAGE[chat.id]
                 pmpermit_sql.approve(chat.id, reason)
-                await event.edit("Private Message Accepted")
+                await event.edit("Approved User [{}](tg://user?id={})".format(firstname, chat.id))
                 await asyncio.sleep(3)
                 await event.delete()
 
@@ -101,13 +111,16 @@ async def approve_p_m(event):
 async def approve_p_m(event):
     if event.fwd_from:
         return
+    global replied_user
+    replied_user = await event.client(GetFullUserRequest(event.chat_id))
+    firstname = replied_user.user.first_name
     reason = event.pattern_match.group(1)
     chat = await event.get_chat()
     if Config.PM_LOGGR_BOT_API_ID is not None:
         if event.is_private:
             if pmpermit_sql.is_approved(chat.id):
                 pmpermit_sql.disapprove(chat.id)
-                await event.edit("Blocked PM")
+                await event.edit("Blocked User [{}](tg://user?id={})".format(firstname, chat.id))
                 await asyncio.sleep(3)
                 await borg(functions.contacts.BlockRequest(chat.id))
 
@@ -302,3 +315,4 @@ async def do_log_pm_action(chat_id, message_text, message_media):
         file=message_media,
         silent=True
     )
+

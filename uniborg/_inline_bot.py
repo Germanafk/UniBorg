@@ -295,6 +295,14 @@ All instructions to run @UniBorg in your device has been explained in https://gi
 
 
     @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
+        data=re.compile(b"txt_prod_(.*)")
+    ))
+    async def on_plug_in_callback_query_handler(event):
+        reply_pop_up_alert = event.data_match.group(1).decode("UTF-8")
+        await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+
+
+    @tgbot.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"ub_plugin_(.*)")
     ))
     async def on_plug_in_callback_query_handler(event):
