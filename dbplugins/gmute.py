@@ -22,7 +22,9 @@ except Exception as e:
 async def gmute_user(event):
 	if event.fwd_from:
 		return
-	input_str = event.pattern_match.group(1)	
+	input_str = event.pattern_match.group(1)
+	replied_user = await event.client(GetFullUserRequest(event.chat_id))
+        firstname = replied_user.user.first_name
 	if not event.reply_to_msg_id and not input_str:
 		await event.edit("`Give a User id or Reply To a User Message To Mute.`")
 		return	
@@ -52,7 +54,7 @@ async def gmute_user(event):
 					return
 			else:
 				muted.insert_one({'user_id':user_id})
-				await event.edit("`G-Muted` [{}](tg://user?id={}).".format(str(user_id),str(user_id)))
+				await event.edit(f"Damn! [{firstname}](tg://user?id={user_id})\nYou talk too much.G-moot for you (ノಠ益ಠ)ノ")
 				logging.info("G-Muted {}".format(str(user_id)))
 		except Exception as e:
 			logging.error(str(e))
