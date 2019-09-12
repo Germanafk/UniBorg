@@ -231,7 +231,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             # logger.info(tl_ib_buttons)
 
             result = builder.article(
-                "Button Generated" tl_ib_buttons else "Proccessing..." ,
+                "Button Generated" if tl_ib_buttons else "Proccessing..." ,
                 text=message_text if tl_ib_buttons else "Error",
                 buttons=tl_ib_buttons if tl_ib_buttons else [custom.Button.inline("Error", "Please Do Not Press Proccessing... Again")],
                 link_preview=False
