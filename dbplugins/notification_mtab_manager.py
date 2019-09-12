@@ -301,9 +301,11 @@ async def do_pm_permit_action(chat_id, event):
 
 
 async def do_log_pm_action(chat_id, message_text, message_media):
+    replied_user = await event.client(GetFullUserRequest(event.chat_id))
+    firstname = replied_user.user.first_name
     the_message = ""
     the_message += "#LOG_PMs\n\n"
-    the_message += f"[User](tg://user?id={chat_id}): {chat_id}\n"
+    the_message += f"[{firstname}](tg://user?id={chat_id}): {chat_id}\n"
     the_message += f"Message: {message_text}\n"
     # the_message += f"Media: {message_media}"
     await borg.send_message(
