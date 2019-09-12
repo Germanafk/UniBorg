@@ -158,7 +158,7 @@ async def on_new_private_message(event):
     # logger.info(chat_id)
 
     current_message_text = message_text.lower()
-    if BAALAJI_TG_USER_BOT == current_message_text or TG_COMPANION_USER_BOT == current_message_text or UNIBORG_USER_BOT_NO_WARN == current_message_text:
+    if BAALAJI_TG_USER_BOT == message_text or TG_COMPANION_USER_BOT == message_text or UNIBORG_USER_BOT_NO_WARN == message_text:
         # userbot's should not reply to other userbot's
         # https://core.telegram.org/bots/faq#why-doesn-39t-my-bot-see-messages-from-other-bots
         return
