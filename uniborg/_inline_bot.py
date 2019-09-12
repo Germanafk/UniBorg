@@ -233,7 +233,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
             result = builder.article(
                 "Button Generated",
                 text=message_text,
-                buttons=tl_ib_buttons,
+                buttons=tl_ib_buttons if tl_ib_buttons else None,
                 link_preview=False
             )
         else:
