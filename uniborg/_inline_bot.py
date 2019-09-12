@@ -196,7 +196,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 link_preview=True
             )
         elif query.startswith("c_button"):
-            BTN_URL_REGEX = re.compile(r"(\{([^\[]+?)\}\<button(?:url|text):(?:/{0,2})(.+?)(:same)?\>)")
+            BTN_URL_REGEX = re.compile(r"(\{([^\[]+?)\}\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
             reply_message = query.replace("c_button ", "")
             markdown_note = reply_message
             prev = 0
@@ -225,7 +225,7 @@ if Config.TG_BOT_USER_NAME_BF_HER is not None and tgbot is not None:
                 note_data += markdown_note[prev:]
 
             message_text = note_data.strip()
-            tl_ib_buttons = build_keyboard(buttons, markdown_note)
+            tl_ib_buttons = build_keyboard(buttons)
         
             # logger.info(message_text)
             # logger.info(tl_ib_buttons)
@@ -348,15 +348,11 @@ def paginate_help(page_number, loaded_plugins, prefix):
         ]
     return pairs
 
-def build_keyboard(buttons, query):
+def build_keyboard(buttons):
     keyb = []
     for btn in buttons:
-        if btn[2] and keyb and "buttonurl" in query:
+        if btn[2] and keyb:
             keyb[-1].append(custom.Button.url(btn[0], btn[1]))
         else:
             keyb.append([custom.Button.url(btn[0], btn[1])])
-        if btn[2] and keyb and "buttontext" in query:
-            keyb[-1].append(custom.Button.inline(btn[0], data="txt_prod_{}".format(btn[1])))
-        else:
-            keyb.append([custom.Button.inline(btn[0], data="txt_prod_{}".format(btn[1]))])
     return keyb
