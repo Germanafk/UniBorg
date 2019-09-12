@@ -6,7 +6,7 @@ import asyncio
 import json
 import random
 import re
-from telethon import events, custom
+from telethon import events, errors, custom
 from uniborg.util import admin_cmd, humanbytes
 
 
