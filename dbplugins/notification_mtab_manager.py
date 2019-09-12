@@ -5,6 +5,7 @@ import asyncio
 import io
 import sql_helpers.no_log_pms_sql as no_log_pms_sql
 import sql_helpers.pmpermit_sql as pmpermit_sql
+from telethon.tl.functions.users import GetFullUserRequest
 from telethon import events, errors, functions, types
 from uniborg.util import admin_cmd
 
