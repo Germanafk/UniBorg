@@ -57,7 +57,7 @@ async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         global replied_user
         replied_user, error_i_a = await get_full_user(event)
-        firstname = replied_user.user.firstname
+        firstname = replied_user.user.first_name
         reason = event.pattern_match.group(1)
         chat = await event.get_chat()
         if event.is_private:
@@ -73,7 +73,7 @@ async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         global replied_user
         replied_user, error_i_a = await get_full_user(event)
-        firstname = replied_user.user.firstname
+        firstname = replied_user.user.first_name
         reason = event.pattern_match.group(1)
         chat = await event.get_chat()
         if event.is_private:
@@ -90,7 +90,7 @@ async def approve_p_m(event):
         return
     global replied_user
     replied_user, error_i_a = await get_full_user(event)
-    firstname = replied_user.user.firstname
+    firstname = replied_user.user.first_name
     reason = event.pattern_match.group(1)
     chat = await event.get_chat()
     if Config.PM_LOGGR_BOT_API_ID is not None:
@@ -113,7 +113,7 @@ async def approve_p_m(event):
         return
     global replied_user
     replied_user, error_i_a = await get_full_user(event)
-    firstname = replied_user.user.firstname
+    firstname = replied_user.user.first_name
     reason = event.pattern_match.group(1)
     chat = await event.get_chat()
     if Config.PM_LOGGR_BOT_API_ID is not None:
