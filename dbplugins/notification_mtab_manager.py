@@ -56,7 +56,7 @@ async def create_dump_channel(event):
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         global replied_user
-        replied_user, error_i_a = await get_full_user(event)
+        replied_user = await event.client(GetFullUserRequest(event.chat_id))
         firstname = replied_user.user.first_name
         reason = event.pattern_match.group(1)
         chat = await event.get_chat()
@@ -72,7 +72,7 @@ async def set_no_log_p_m(event):
 async def set_no_log_p_m(event):
     if Config.PM_LOGGR_BOT_API_ID is not None:
         global replied_user
-        replied_user, error_i_a = await get_full_user(event)
+        replied_user = await event.client(GetFullUserRequest(event.chat_id))
         firstname = replied_user.user.first_name
         reason = event.pattern_match.group(1)
         chat = await event.get_chat()
@@ -89,7 +89,7 @@ async def approve_p_m(event):
     if event.fwd_from:
         return
     global replied_user
-    replied_user, error_i_a = await get_full_user(event)
+    replied_user = await event.client(GetFullUserRequest(event.chat_id))
     firstname = replied_user.user.first_name
     reason = event.pattern_match.group(1)
     chat = await event.get_chat()
@@ -112,7 +112,7 @@ async def approve_p_m(event):
     if event.fwd_from:
         return
     global replied_user
-    replied_user, error_i_a = await get_full_user(event)
+    replied_user = await event.client(GetFullUserRequest(event.chat_id))
     firstname = replied_user.user.first_name
     reason = event.pattern_match.group(1)
     chat = await event.get_chat()
@@ -318,56 +318,3 @@ async def do_log_pm_action(chat_id, message_text, message_media):
         silent=True
     )
 
-async def get_full_user(event):
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        if previous_message.forward:
-            replied_user = await event.client(
-                GetFullUserRequest(
-                    previous_message.forward.from_id or previous_message.forward.channel_id
-                )
-            )
-            return replied_user, None
-        else:
-            replied_user = await event.client(
-                GetFullUserRequest(
-                    previous_message.from_id
-                )
-            )
-            return replied_user, None
-    else:
-        input_str = None
-        try:
-            input_str = event.pattern_match.group(1)
-        except IndexError as e:
-            return None, e
-        if event.message.entities is not None:
-            mention_entity = event.message.entities
-            probable_user_mention_entity = mention_entity[0]
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user, None
-            else:
-                try:
-                    user_object = await event.client.get_entity(input_str)
-                    user_id = user_object.id
-                    replied_user = await event.client(GetFullUserRequest(user_id))
-                    return replied_user, None
-                except Exception as e:
-                    return None, e
-        elif event.is_private:
-            try:
-                user_id = event.chat_id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user, None
-            except Exception as e:
-                return None, e
-        else:
-            try:
-                user_object = await event.client.get_entity(int(input_str))
-                user_id = user_object.id
-                replied_user = await event.client(GetFullUserRequest(user_id))
-                return replied_user, None
-            except Exception as e:
-                return None, e
