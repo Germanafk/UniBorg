@@ -4,12 +4,15 @@ Commands:
 .setwelcome <Welcome Message>
 .listwelcome"""
 
-from telethon import events
-from telethon.utils import pack_bot_file_id
+from telethon import events, utils
+from telethon.tl import types
 from sql_helpers.welcome_sql import get_current_welcome_settings, \
     add_welcome_setting, rm_welcome_setting, update_previous_welcome
 from uniborg.util import admin_cmd
 
+TYPE_TEXT = 0
+TYPE_PHOTO = 1
+TYPE_DOCUMENT = 2
 
 @borg.on(events.ChatAction())  # pylint:disable=E0602
 async def _(event):
@@ -20,7 +23,7 @@ async def _(event):
         user_joined=True,
         user_left=False,
         user_kicked=False,"""
-        if event.user_joined:
+        if event.user_joined or event.user_added::
             if cws.should_clean_welcome:
                 try:
                     await borg.delete_messages(  # pylint:disable=E0602
@@ -33,6 +36,22 @@ async def _(event):
             chat = await event.get_chat()
 
             title = chat.title if chat.title else "this chat"
+            file_media = None
+            if cws.message_type == TYPE_PHOTO:
+                file_media = types.InputPhoto(
+                    int(cws.media_id),
+                    int(cws.media_access_hash),
+                    cws.media_file_reference
+                )
+            elif cws.message_type == TYPE_DOCUMENT:
+                file_media = types.InputDocument(
+                    int(cws.media_id),
+                    int(cws.media_access_hash),
+                    cws.media_file_reference
+                )
+            else:
+                file_media = None
+            #
             participants = await event.client.get_participants(chat)
             count = len(participants)
             current_saved_welcome_message = cws.custom_welcome_message
@@ -50,7 +69,7 @@ async def _(event):
             
             current_message = await event.reply(
                 current_saved_welcome_message.format(mention=mention, title=title, count=count, first=first, last=last, fullname=fullname, username=username, userid=userid),
-                file=cws.media_file_id
+                file=file_media
             )
             update_previous_welcome(event.chat_id, current_message.id)
 
@@ -61,13 +80,30 @@ async def _(event):
         return
     msg = await event.get_reply_message()
     if msg and msg.media:
-        bot_api_file_id = pack_bot_file_id(msg.media)
         if get_current_welcome_settings(event.chat_id):
             rm_welcome_setting(event.chat_id)
-            add_welcome_setting(event.chat_id, msg.message, True, 0, bot_api_file_id)
+            media = None
+            message_type = TYPE_TEXT
+            if isinstance(msg.media, types.MessageMediaPhoto):
+                media = utils.get_input_photo(msg.media.photo)
+                message_type = TYPE_PHOTO
+            elif isinstance(msg.media, types.MessageMediaDocument):
+                media = utils.get_input_document(msg.media.document)
+                message_type = TYPE_DOCUMENT
+        #
+            add_welcome_setting(event.chat_id, msg.message, True, 0, message_type, media.id, media.access_hash, media.file_reference)
             await event.edit("Welcome Message updated. ")
         else:
-            add_welcome_setting(event.chat_id, msg.message, True, 0, bot_api_file_id)
+            media = None
+            message_type = TYPE_TEXT
+            if isinstance(msg.media, types.MessageMediaPhoto):
+                media = utils.get_input_photo(msg.media.photo)
+                message_type = TYPE_PHOTO
+            elif isinstance(msg.media, types.MessageMediaDocument):
+                media = utils.get_input_document(msg.media.document)
+                message_type = TYPE_DOCUMENT
+        #
+            add_welcome_setting(event.chat_id, msg.message, True, 0, message_type, media.id, media.access_hash, media.file_reference)
             await event.edit("Welcome Message saved. ")
     else:
         input_str = event.text.split(None, 1)
