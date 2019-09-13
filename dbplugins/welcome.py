@@ -23,7 +23,7 @@ async def _(event):
         user_joined=True,
         user_left=False,
         user_kicked=False,"""
-        if event.user_joined or event.user_added::
+        if event.user_joined or event.user_added:
             if cws.should_clean_welcome:
                 try:
                     await borg.delete_messages(  # pylint:disable=E0602
