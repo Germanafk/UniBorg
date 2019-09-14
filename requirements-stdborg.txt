@@ -16,6 +16,7 @@ Pillow
 psycopg2
 pymongo
 python-barcode
+pySmartDL
 python-magic
 qrcode
 regex
