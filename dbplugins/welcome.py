@@ -37,7 +37,7 @@ async def _(event):
             count = len(participants)
             msg_o = await event.client.get_messages(
                 entity=Config.PRIVATE_CHANNEL_BOT_API_ID,
-                ids=cws.f_mesg_id
+                ids=int(cws.f_mesg_id)
             )
             current_saved_welcome_message = msg_o.message
             file_media = msg_o.media
