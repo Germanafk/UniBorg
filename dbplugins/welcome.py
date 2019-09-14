@@ -120,8 +120,7 @@ async def _(event):
             "[This](https://t.me/c/{}/{}) is your welcome message.".format(
             Config.PRIVATE_CHANNEL_BOT_API_ID[4:],
             cws.f_mesg_id
-        )
-        return
+        ))
     else:
         await event.edit(
             "No Welcome Message found"
