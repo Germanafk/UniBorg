@@ -106,7 +106,7 @@ async def _(event):
         "[This](https://t.me/c/{}/{}) was your previous welcome message.".format(
             Config.PRIVATE_CHANNEL_BOT_API_ID[4:],
             cws.f_mesg_id
-    )
+    ))
 
 
 @borg.on(admin_cmd("listwelcome"))  # pylint:disable=E0602
