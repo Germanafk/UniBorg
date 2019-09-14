@@ -1,4 +1,4 @@
-rom sqlalchemy import Column, UnicodeText, LargeBinary, Numeric
+from sqlalchemy import Column, UnicodeText, LargeBinary, Numeric
 from sql_helpers import SESSION, BASE
 
 
