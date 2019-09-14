@@ -114,7 +114,7 @@ async def Lydia_bot_update(event):
     
                 # Try to think a thought.            
 				try:
-					async with borg.action(event.chat_id, "typing"):
+					async with event.client.action(event.chat_id, "typing"):
 						await asyncio.sleep(1)
 						output = api_client.think_thought(ses['id'],query)
 						await event.reply(output)
@@ -129,7 +129,7 @@ async def Lydia_bot_update(event):
 					lydia.update_one(c,{'$set':{'user_id':event.from_id,'chat_id':event.chat_id,'session':ses}})			
 	
                     # Reply again, if this method fails then there's a other issue.
-					async with borg.action(event.chat_id, "typing"):
+					async with event.client.action(event.chat_id, "typing"):
 						await asyncio.sleep(1)
 						output = api_client.think_thought(ses['id'],query)
 						await event.reply(output)
