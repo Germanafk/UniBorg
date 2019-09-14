@@ -1,5 +1,6 @@
 """ command: .unzip
 coded by @By_Azade
+code rewritten my SnapDragon7410
 """
 
 import asyncio
@@ -22,7 +23,7 @@ if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
 
-@borg.on(admin_cmd(pattern=("unzip")))
+@borg.on(admin_cmd(pattern="unzip"))
 async def _(event):
     if event.fwd_from:
         return
@@ -46,13 +47,10 @@ async def _(event):
         else:
             end = datetime.now()
             ms = (end - start).seconds
-            await mone.edit("Downloaded to `{}` in {} seconds.".format(downloaded_file_name, ms))
+            await mone.edit("Stored the zip to `{}` in {} seconds.".format(downloaded_file_name, ms))
 
-        await asyncio.sleep(3)
         with zipfile.ZipFile(downloaded_file_name, 'r') as zip_ref:
             zip_ref.extractall(extracted)
-        unzip = zipfile.ZipFile(downloaded_file_name,'r')
-        unzip.extractall(path=extracted)
         filename = sorted(get_lst_of_files(extracted, []))
         #filename = filename + "/"
         await event.edit("Unzipping now")
@@ -90,7 +88,7 @@ async def _(event):
                     await borg.send_file(
                         event.chat_id,
                         single_file,
-                        caption=caption_rts,
+                        caption=f"UnZipped `{caption_rts}`",
                         force_document=force_document,
                         supports_streaming=supports_streaming,
                         allow_cache=False,
@@ -109,6 +107,7 @@ async def _(event):
                     # some media were having some issues
                     continue
                 os.remove(single_file)
+        os.remove(downloaded_file_name)
 
 
 
