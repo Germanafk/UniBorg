@@ -31,7 +31,7 @@ async def on_snip(event):
         for snip in snips:
             pattern = r"( |^|[^\w])" + re.escape(snip.keyword) + r"( |$|[^\w])"
             if re.search(pattern, name, flags=re.IGNORECASE):
-                 msg_o = await event.client.get_messages(
+                msg_o = await event.client.get_messages(
                     entity=Config.PRIVATE_CHANNEL_BOT_API_ID,
                     ids=int(snip.f_mesg_id)
                 )
