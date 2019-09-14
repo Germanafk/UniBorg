@@ -110,7 +110,7 @@ async def _(event):
     
     
 @borg.on(admin_cmd("listwelcome"))  # pylint:disable=E0602
-async def _(event):
+async def blah(event):
     if event.fwd_from:
         return
     cws = get_current_welcome_settings(event.chat_id)
