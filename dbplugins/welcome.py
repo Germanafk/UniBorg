@@ -107,10 +107,10 @@ async def _(event):
             Config.PRIVATE_CHANNEL_BOT_API_ID[4:],
             cws.f_mesg_id
     )
-    
-    
+
+
 @borg.on(admin_cmd("listwelcome"))  # pylint:disable=E0602
-async def blah(event):
+async def _(event):
     if event.fwd_from:
         return
     cws = get_current_welcome_settings(event.chat_id)
