@@ -40,7 +40,7 @@ async def _(event):
         # if even, not escaped -> create button
         if n_escapes % 2 == 0:
             # create a thruple with button label, url, and newline status
-            buttons.append((match.group(2), match.group(4), bool(match.group(5))))
+            buttons.append((match.group(2), match.group(3), match.group(4), bool(match.group(5))))
             note_data += markdown_note[prev:match.start(1)]
             prev = match.end(1)
 
@@ -52,7 +52,7 @@ async def _(event):
         note_data += markdown_note[prev:]
 
     message_text = note_data.strip()
-    tl_ib_buttons = build_keyboard(buttons, match.group(3))
+    tl_ib_buttons = build_keyboard(buttons)
 
     # logger.info(message_text)
     # logger.info(tl_ib_buttons)
@@ -85,15 +85,15 @@ if Config.TG_BOT_USER_NAME_BF_HER is None or tgbot is None:
         reply_pop_up_alert = event.data_match.group(1).decode("UTF-8")
         await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
-def build_keyboard(buttons, tipe):
+def build_keyboard(buttons):
     keyb = []
     for btn in buttons:
-        if btn[2] and keyb and tipe == "url":
-            keyb[-1].append(custom.Button.url(btn[0], btn[1]))
-        elif tipe == "url":
-            keyb.append([custom.Button.url(btn[0], btn[1])])
-        if btn[2] and keyb and tipe == "text":
-            keyb[-1].append(custom.Button.inline(btn[0], data="txt_prod_{}".format(btn[1])))
-        elif tipe == "text":
-            keyb.append([custom.Button.inline(btn[0], data="txt_prod_{}".format(btn[1]))])
+        if btn[2] and keyb and btn[1] == "url":
+            keyb[-1].append(custom.Button.url(btn[0], btn[2]))
+        elif btn[1] == "url":
+            keyb.append([custom.Button.url(btn[0], btn[2])])
+        if btn[2] and keyb and btn[1] == "text":
+            keyb[-1].append(custom.Button.inline(btn[0], data="txt_prod_{}".format(btn[2])))
+        elif btn[1] == "text":
+            keyb.append([custom.Button.inline(btn[0], data="txt_prod_{}".format(btn[2]))])
     return keyb
