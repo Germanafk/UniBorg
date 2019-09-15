@@ -100,8 +100,8 @@ class Config(object):
     TEMP_DIR = os.environ.get("TEMP_DIR", None)
     CHANNEL_ID = int(os.environ.get("CHANNEL_ID", -100))
     #Google Chrome Stuff
-    CHROME_DRIVER = os.environ.get("CHROME_DRIVER", None)
-    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", None)
+    CHROME_DRIVER = os.environ.get("CHROME_DRIVER", "/app/.chromedriver/bin/chromedriver")
+    GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", "/app/.apt/usr/bin/google-chrome")
     # Google Drive ()
     G_DRIVE_CLIENT_ID = os.environ.get("G_DRIVE_CLIENT_ID", None)
     G_DRIVE_CLIENT_SECRET = os.environ.get("G_DRIVE_CLIENT_SECRET", None)
