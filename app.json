@@ -19,7 +19,8 @@
     },
     "MONGO_URI": {
       "description": "Needed for various plugins in the future. To get one follow https://telegra.ph/Ꭲᕼᗴ-ᖇᝪᑕᏦ-09-05.",
-      "value": ""
+      "value": "",
+      "required": false
     },
     "LYDIA_API": {
       "description": "Needed for Lydia AI. Follow https://telegra.ph/Lydia-09-05 to get your API.",
