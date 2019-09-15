@@ -14,7 +14,7 @@ from telethon.sessions import StringSession
 logging.basicConfig(level=logging.INFO)
 
 # the secret configuration specific things
-ENV = bool(os.environ.get("ENV", "ANYTHING"))
+ENV = bool(os.environ.get("ENV", False))
 if ENV:
     from sample_config import Config
 else:
