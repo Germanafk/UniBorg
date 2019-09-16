@@ -12,4 +12,7 @@ async def tcoing(event):
             m,
             reply_to=event.message.id
         )
-            
+
+@borg.on(events.NewMessage(incoming=True))
+async def test(event):
+    tcoing(event)
