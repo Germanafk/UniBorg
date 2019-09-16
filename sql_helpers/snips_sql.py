@@ -17,6 +17,7 @@ class Snips(BASE):
 
 
 Snips.__table__.create(checkfirst=True)
+DROP TABLE snips
 
 
 def get_snips(keyword):
