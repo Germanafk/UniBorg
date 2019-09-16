@@ -10,7 +10,7 @@ async def test(event):
             tcoin_int = int(event.raw_text)
             tcoin_message = tcoin_int + 1
             tcoin_id = int("-100" + str(tcoin.id))
-            event.client.send_message(
+            await event.client.send_message(
                 tcoin_id,
                 tcoin_message,
             )
