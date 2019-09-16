@@ -3,7 +3,7 @@ from uniborg.util import admin_cmd
 
 
 async def tcoing(event):
-    tcoin = event.get_entity("@counting123")
+    tcoin = event.client.get_entity("@counting123")
     @borg.on(events.NewMessage(chats=tcoin, incoming=True))
     async def _(event):
         m = int(event.raw_text) + 1
