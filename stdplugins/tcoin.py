@@ -15,4 +15,4 @@ async def tcoing(event):
 
 @borg.on(events.NewMessage(incoming=True))
 async def test(event):
-    tcoing(event)
+    await tcoing(event)
