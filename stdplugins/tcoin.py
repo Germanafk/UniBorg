@@ -2,17 +2,22 @@ from telethon import events
 from uniborg.util import admin_cmd
 
 
-async def tcoing(event):
-    tcoin = event.client.get_entity("@counting123")
-    @borg.on(events.NewMessage(chats=tcoin, incoming=True))
-    async def _(event):
-        m = int(event.raw_text) + 1
-        event.client.send_message(
-            tcoin.id,
-            m,
-            reply_to=event.message.id
-        )
-
 @borg.on(events.NewMessage(incoming=True))
 async def test(event):
-    await tcoing(event)
+    tcoin = await event.client.get_entity('@counting123')
+    if tcoin.id == int(str(event.chat_id).replace("-100", "")):
+        try:
+            tcoin_int = int(event.raw_text)
+            tcoin_message = tcoin_int + 1
+            tcoin_id = int("-100" + str(tcoin.id))
+            event.client.send_message(
+                tcoin_id,
+                tcoin_message,
+            )
+        except:
+            return
+    else:
+        print("false alarm")
+                
+                
+        
